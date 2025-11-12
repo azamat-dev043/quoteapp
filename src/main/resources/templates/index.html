@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bright Quotes</title>
+    <link rel="stylesheet" th:href="@{/css/positive.css}">
+</head>
+<body>
+<header class="hero">
+    <p class="badge">Community Uplift</p>
+    <h1>Bright quotes for brighter days</h1>
+    <p class="subtitle">
+        Every line shared here is a gentle reminder that kindness and optimism travel fast.
+    </p>
+    <div class="counts">
+        <p><strong th:text="${totalQuotes}">0</strong> beams of encouragement shared so far.</p>
+    </div>
+</header>
+
+<main class="layout">
+    <section class="panel spotlight" th:if="${spotlight}">
+        <p class="panel-label">Daily spotlight</p>
+        <blockquote>
+            <p th:text="${spotlight.message}">Spotlight quote.</p>
+            <footer>— <span th:text="${spotlight.author}">Author</span></footer>
+        </blockquote>
+    </section>
+
+    <section class="panel share-form">
+        <p class="panel-label">Add your own sunshine</p>
+        <form th:action="@{/quotes}" th:object="${quoteForm}" method="post" novalidate>
+            <div class="field-group">
+                <label for="author">Your name (optional)</label>
+                <input id="author" type="text" th:field="*{author}" placeholder="Hopeful human">
+                <p class="error" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></p>
+            </div>
+            <div class="field-group">
+                <label for="message">Your uplifting words</label>
+                <textarea id="message" rows="3" th:field="*{message}" placeholder="Share a positive reminder..."></textarea>
+                <p class="error" th:if="${#fields.hasErrors('message')}" th:errors="*{message}"></p>
+            </div>
+            <button type="submit">Share positivity</button>
+        </form>
+    </section>
+
+    <section class="panel latest" th:if="${latest}">
+        <p class="panel-label">Freshly added</p>
+        <blockquote>
+            <p th:text="${latest.message}">Latest quote.</p>
+            <footer>— <span th:text="${latest.author}">Author</span></footer>
+        </blockquote>
+    </section>
+</main>
+
+<section class="panel feed">
+    <p class="panel-label">Community feed</p>
+    <div class="quote-grid">
+        <article class="quote-card" th:each="quote : ${quotes}">
+            <p class="quote-text" th:text="${quote.message}">
+                Quote content
+            </p>
+            <p class="quote-meta">
+                — <span th:text="${quote.author}">Anonymous Dreamer</span>
+            </p>
+        </article>
+        <p th:if="${quotes.isEmpty()}" class="empty">Be the first to sprinkle good vibes here!</p>
+    </div>
+</section>
+
+<footer>
+    <p>Built with Spring Boot &amp; Thymeleaf to help positive words ripple outward.</p>
+</footer>
+</body>
+</html>
